@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="01" author="carina" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="credit_line"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="credit_line_sequence" startValue="1" incrementBy="1"/>
+        <createTable tableName="credit_line" remarks="A table to register all the credit lines of the clients">
+            <column name="id" type="bigint" defaultValueSequenceNext="credit_line_sequence">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="client_id" type="varchar(100)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="founding_type" type="varchar(25)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="cash_balance" type="NUMERIC(8,2)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="monthly_revenue" type="NUMERIC(8,2)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="requested_credit_line" type="NUMERIC(8,2)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="requested_date" type="TIMESTAMP">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="credit_line_recommended" type="NUMERIC(8,2)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="accepted" type="bool">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="credit_line_authorized" type="NUMERIC(8,2)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="message" type="varchar(200)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
