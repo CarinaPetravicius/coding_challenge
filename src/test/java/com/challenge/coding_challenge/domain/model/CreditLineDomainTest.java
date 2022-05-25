@@ -20,6 +20,7 @@ public class CreditLineDomainTest {
         assertTrue(creditLine.getAccepted());
         assertEquals(creditLine.getRequestedCreditLine(), creditLine.getCreditLineAuthorized());
         assertEquals(16100.00, creditLine.getCreditLineRecommended());
+        assertEquals(CreditLineDomain.CREDIT_AUTHORIZED, creditLine.getMessage());
     }
 
     @Test
@@ -34,6 +35,7 @@ public class CreditLineDomainTest {
         assertFalse(creditLine.getAccepted());
         assertEquals(0.0, creditLine.getCreditLineAuthorized());
         assertEquals(16100.00, creditLine.getCreditLineRecommended());
+        assertEquals(CreditLineDomain.CREDIT_NOT_AUTHORIZED, creditLine.getMessage());
     }
 
     @Test
@@ -48,7 +50,7 @@ public class CreditLineDomainTest {
         assertTrue(creditLine.getAccepted());
         assertEquals(creditLine.getRequestedCreditLine(), creditLine.getCreditLineAuthorized());
         assertEquals(7071.178, creditLine.getCreditLineRecommended());
-        // TODO round the decimal of the number
+        assertEquals(CreditLineDomain.CREDIT_AUTHORIZED, creditLine.getMessage());
     }
 
     @Test
@@ -63,6 +65,7 @@ public class CreditLineDomainTest {
         assertTrue(creditLine.getAccepted());
         assertEquals(creditLine.getRequestedCreditLine(), creditLine.getCreditLineAuthorized());
         assertEquals(16100.00, creditLine.getCreditLineRecommended());
+        assertEquals(CreditLineDomain.CREDIT_AUTHORIZED, creditLine.getMessage());
     }
 
     @Test
@@ -77,7 +80,7 @@ public class CreditLineDomainTest {
         assertTrue(creditLine.getAccepted());
         assertEquals(creditLine.getRequestedCreditLine(), creditLine.getCreditLineAuthorized());
         assertEquals(7183.516666666666, creditLine.getCreditLineRecommended());
-        // TODO round the decimal of the number
+        assertEquals(CreditLineDomain.CREDIT_AUTHORIZED, creditLine.getMessage());
     }
 
     @Test
@@ -92,6 +95,7 @@ public class CreditLineDomainTest {
         assertFalse(creditLine.getAccepted());
         assertEquals(0.0, creditLine.getCreditLineAuthorized());
         assertEquals(16100.00, creditLine.getCreditLineRecommended());
+        assertEquals(CreditLineDomain.CREDIT_NOT_AUTHORIZED, creditLine.getMessage());
     }
 
     @Test
@@ -106,7 +110,35 @@ public class CreditLineDomainTest {
         assertFalse(creditLine.getAccepted());
         assertEquals(0.0, creditLine.getCreditLineAuthorized());
         assertEquals(7183.516666666666, creditLine.getCreditLineRecommended());
-        // TODO round the decimal of the number
+        assertEquals(CreditLineDomain.CREDIT_NOT_AUTHORIZED, creditLine.getMessage());
+    }
+
+    @Test
+    void setASalesAgentMessage() {
+        final CreditLineDomain creditLine = new CreditLineDomain(null, "1234569", FoundingTypeDomain.Startup,
+                21550.55, 19500.00, 7183.517,
+                LocalDateTime.now(), null, null, null, null);
+
+        creditLine.setSalesAgentMessage();
+
+        assertEquals(CreditLineDomain.SALES_AGENT_MESSAGE, creditLine.getMessage());
+    }
+
+    @Test
+    void updateWithPreviousCreditLineAuthorized() {
+        final CreditLineDomain previousCreditLineAuthorized = new CreditLineDomain(null, "1234569", FoundingTypeDomain.Startup,
+                21550.55, 19500.00, 7183.517,
+                LocalDateTime.now(), 8000.00, true, 7183.517, CreditLineDomain.CREDIT_AUTHORIZED);
+
+        final CreditLineDomain creditLine = new CreditLineDomain(null, "1234569", FoundingTypeDomain.Startup,
+                21550.55, 19500.00, 7183.517,
+                LocalDateTime.now(), null, false, 0.0, null);
+
+        creditLine.updateWithPreviousCreditLineAuthorized(previousCreditLineAuthorized);
+
+        assertEquals(previousCreditLineAuthorized.getAccepted(), creditLine.getAccepted());
+        assertEquals(previousCreditLineAuthorized.getCreditLineAuthorized(), creditLine.getCreditLineAuthorized());
+        assertEquals(previousCreditLineAuthorized.getMessage(), creditLine.getMessage());
     }
 
 }

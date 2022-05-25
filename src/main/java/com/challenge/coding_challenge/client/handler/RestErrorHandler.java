@@ -1,6 +1,7 @@
 package com.challenge.coding_challenge.client.handler;
 
 import com.challenge.coding_challenge.client.model.CreditLineResponse;
+import com.challenge.coding_challenge.domain.exception.TooManyRequestsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -53,6 +54,15 @@ public class RestErrorHandler {
         log.error("Bad Request: {}", errors, exception);
 
         return new CreditLineResponse(null, null, null, errors);
+    }
+
+    @ExceptionHandler(TooManyRequestsException.class)
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    public CreditLineResponse handleTooManyRequestsException(TooManyRequestsException exception) {
+        log.info("Too Many Requests: {}", exception.getMessage(), exception);
+
+        return new CreditLineResponse(null, null, null,
+                new ArrayList<>(Collections.singleton(exception.getMessage())));
     }
 
     @ExceptionHandler(Throwable.class)

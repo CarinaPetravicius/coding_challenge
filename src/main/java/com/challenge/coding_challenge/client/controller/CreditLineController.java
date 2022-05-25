@@ -3,7 +3,9 @@ package com.challenge.coding_challenge.client.controller;
 import com.challenge.coding_challenge.client.api.CreditLineApi;
 import com.challenge.coding_challenge.client.model.CreditLineRequest;
 import com.challenge.coding_challenge.client.model.CreditLineResponse;
+import com.challenge.coding_challenge.client.translator.CreditLineDomainToCreditLineResponse;
 import com.challenge.coding_challenge.client.translator.CreditLineRequestToCreditLineDomain;
+import com.challenge.coding_challenge.domain.model.CreditLineDomain;
 import com.challenge.coding_challenge.domain.usecase.CreateCreditLineForACustomerUseCase;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -22,9 +24,9 @@ public class CreditLineController implements CreditLineApi {
     @Override
     public CreditLineResponse createCreditLine(CreditLineRequest creditLineRequest) {
         log.info("The client {} started to request a credit line", creditLineRequest.clientId());
-        createCreditLineForACustomer.execute(CreditLineRequestToCreditLineDomain.translate(creditLineRequest));
+        final CreditLineDomain creditLineDomain = createCreditLineForACustomer.execute(CreditLineRequestToCreditLineDomain.translate(creditLineRequest));
         log.info("The client {} received a response for the credit line", creditLineRequest.clientId());
-        return null;
+        return CreditLineDomainToCreditLineResponse.translate(creditLineDomain);
     }
 
 }
