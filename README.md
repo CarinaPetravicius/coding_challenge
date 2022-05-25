@@ -24,3 +24,14 @@ You must have the openjdk 17, maven, docker and docker compose.
        mvn clean install
 
 5. Run the main java class CodingChallengeApplication.
+
+
+### Microservices Endpoints
+
+| Method  | URL                                    | Description                                                 |
+|---------|----------------------------------------|-------------------------------------------------------------|
+| GET     | http://localhost:8080/swagger-ui.html  | swagger for documentation.                                  |
+| GET     | http://localhost:8080/v3/api-docs      | swagger for documentation.                                  |
+| GET     | http://localhost:8080/actuator/info    | actuator endpoint to see the infos about this microservice. |
+| GET     | http://localhost:8080/actuator/health  | actuator endpoint to see microservice health                |
+| POST    | http://localhost:8080/v1/credit_line   | to request a credit line                                    |

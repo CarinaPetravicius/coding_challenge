@@ -61,8 +61,7 @@ public class RestErrorHandler {
     public CreditLineResponse handleTooManyRequestsException(TooManyRequestsException exception) {
         log.info("Too Many Requests: {}", exception.getMessage(), exception);
 
-        return new CreditLineResponse(null, null, null,
-                new ArrayList<>(Collections.singleton(exception.getMessage())));
+        return new CreditLineResponse(null, null, null, List.of(exception.getMessage()));
     }
 
     @ExceptionHandler(Throwable.class)
@@ -70,8 +69,7 @@ public class RestErrorHandler {
     public CreditLineResponse handleGeneralInternalException(Throwable exception) {
         log.error("Internal Error: {}", exception.getMessage(), exception);
 
-        return new CreditLineResponse(null, null, null,
-                new ArrayList<>(Collections.singleton(exception.getMessage())));
+        return new CreditLineResponse(null, null, null, List.of(exception.getMessage()));
     }
 
 }
