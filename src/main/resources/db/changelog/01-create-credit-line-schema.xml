@@ -23,25 +23,25 @@
             <column name="founding_type" type="varchar(25)">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="cash_balance" type="NUMERIC(8,2)">
+            <column name="cash_balance" type="NUMERIC">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="monthly_revenue" type="NUMERIC(8,2)">
+            <column name="monthly_revenue" type="NUMERIC">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="requested_credit_line" type="NUMERIC(8,2)">
+            <column name="requested_credit_line" type="NUMERIC">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="requested_date" type="TIMESTAMP">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="credit_line_recommended" type="NUMERIC(8,2)">
+            <column name="credit_line_recommended" type="NUMERIC">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="accepted" type="bool">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="credit_line_authorized" type="NUMERIC(8,2)">
+            <column name="credit_line_authorized" type="NUMERIC">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="message" type="varchar(200)">
