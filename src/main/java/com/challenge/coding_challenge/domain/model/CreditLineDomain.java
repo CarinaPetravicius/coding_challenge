@@ -30,19 +30,7 @@ public class CreditLineDomain {
     private String message;
 
     public void calculateTheCreditLine() {
-        if (foundingType.equals(FoundingTypeDomain.SME)) {
-            creditLineRecommended = calculateMonthlyRevenueRule();
-        } else {
-            creditLineRecommended = Math.max(calculateMonthlyRevenueRule(), calculateCashBalanceRule());
-        }
-    }
-
-    private Double calculateMonthlyRevenueRule() {
-        return monthlyRevenue / 5;
-    }
-
-    private Double calculateCashBalanceRule() {
-        return cashBalance / 3;
+        creditLineRecommended = foundingType.getCompanyType().calculateTheCreditLine(monthlyRevenue, cashBalance);
     }
 
     public void releaseTheCreditLine() {

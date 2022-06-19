@@ -141,4 +141,34 @@ public class CreditLineDomainTest {
         assertEquals(previousCreditLineAuthorized.getMessage(), creditLine.getMessage());
     }
 
+    @Test
+    void releaseACreditLineForABigClient() {
+        final CreditLineDomain creditLine = new CreditLineDomain(null, "1234570", FoundingTypeDomain.Big,
+                20550.50, 80500.00, 6000.00,
+                LocalDateTime.now(), null, null, null, null);
+
+        creditLine.calculateTheCreditLine();
+        creditLine.releaseTheCreditLine();
+
+        assertTrue(creditLine.getAccepted());
+        assertEquals(creditLine.getRequestedCreditLine(), creditLine.getCreditLineAuthorized());
+        assertEquals(6850.166666666667, creditLine.getCreditLineRecommended());
+        assertEquals(CreditLineDomain.CREDIT_AUTHORIZED, creditLine.getMessage());
+    }
+
+    @Test
+    void doNotReleaseACreditLineForABigClient() {
+        final CreditLineDomain creditLine = new CreditLineDomain(null, "1234570", FoundingTypeDomain.Big,
+                20550.50, 80500.00, 6850.17,
+                LocalDateTime.now(), null, null, null, null);
+
+        creditLine.calculateTheCreditLine();
+        creditLine.releaseTheCreditLine();
+
+        assertFalse(creditLine.getAccepted());
+        assertEquals(0.0, creditLine.getCreditLineAuthorized());
+        assertEquals(6850.166666666667, creditLine.getCreditLineRecommended());
+        assertEquals(CreditLineDomain.CREDIT_NOT_AUTHORIZED, creditLine.getMessage());
+    }
+
 }

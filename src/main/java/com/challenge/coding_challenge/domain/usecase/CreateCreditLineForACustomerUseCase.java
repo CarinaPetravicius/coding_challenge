@@ -20,7 +20,6 @@ public class CreateCreditLineForACustomerUseCase {
 
     private static final Logger log = LoggerFactory.getLogger(CreateCreditLineForACustomerUseCase.class);
     private GetAllPreviousCreditLineForCustomerGateway getAllPreviousCreditLineForCustomer;
-
     private GetAllPreviousCreditLineApprovedInAPeriodForCustomerGateway getAllPreviousCreditLineApprovedInAPeriodForCustomer;
     private SaveCreditLineForCustomerGateway saveCreditLineForCustomer;
 
@@ -34,17 +33,17 @@ public class CreateCreditLineForACustomerUseCase {
             log.info("Creating the first credit line for the client");
             saveCreditLineForCustomer.execute(creditLineRequested);
             return creditLineRequested;
-        } else {
-            final CreditLineDomain recentCreditSaved = creditLines.get(0);
-
-            if (recentCreditSaved.getAccepted()) {
-                log.info("The client already had a credit line approved");
-                return createAndReturnAcceptedCredit(creditLineRequested, recentCreditSaved);
-            } else {
-                log.info("The client already had a credit line not approved");
-                return createOrReturnRecentNotAcceptedCredit(creditLineRequested, recentCreditSaved, creditLines);
-            }
         }
+
+        final CreditLineDomain recentCreditSaved = creditLines.get(0);
+
+        if (recentCreditSaved.getAccepted()) {
+            log.info("The client already had a credit line approved");
+            return createAndReturnAcceptedCredit(creditLineRequested, recentCreditSaved);
+        }
+
+        log.info("The client already had a credit line not approved");
+        return createOrReturnRecentNotAcceptedCredit(creditLineRequested, recentCreditSaved, creditLines);
     }
 
     private CreditLineDomain createAndReturnAcceptedCredit(CreditLineDomain creditRequested, CreditLineDomain recentCreditSaved) {
@@ -74,12 +73,11 @@ public class CreateCreditLineForACustomerUseCase {
 
         if (recentCreditSaved.getMessage().equals(CreditLineDomain.SALES_AGENT_MESSAGE)) {
             return recentCreditSaved;
-        } else {
-            changeToSalesMessageIfGetLimitOfNotAccepted(creditLines, creditRequested);
-
-            saveCreditLineForCustomer.execute(creditRequested);
-            return creditRequested;
         }
+
+        changeToSalesMessageIfExceedsLimitOfNotAccepted(creditLines, creditRequested);
+        saveCreditLineForCustomer.execute(creditRequested);
+        return creditRequested;
     }
 
     private void verifyTooManyRequestForNotApprovedCreditLine(CreditLineDomain creditRequested, CreditLineDomain recentCreditSaved) {
@@ -90,7 +88,7 @@ public class CreateCreditLineForACustomerUseCase {
         }
     }
 
-    private void changeToSalesMessageIfGetLimitOfNotAccepted(List<CreditLineDomain> creditLines, CreditLineDomain creditRequested) {
+    private void changeToSalesMessageIfExceedsLimitOfNotAccepted(List<CreditLineDomain> creditLines, CreditLineDomain creditRequested) {
         if (!creditRequested.getAccepted() && creditLines.size() >= CreditLineDomain.LIMIT_OF_NOT_APPROVED - 1) {
             log.info("The sales agent will contact the client");
             creditRequested.setSalesAgentMessage();
